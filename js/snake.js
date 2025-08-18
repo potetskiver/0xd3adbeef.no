@@ -153,6 +153,7 @@ function showSnake() {
       direction = {x: 1, y: 0};
       food = spawnFood();
       growing = 0;
+      score = 0;
       gameOver = false;
       draw();
       return;
