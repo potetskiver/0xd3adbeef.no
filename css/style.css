@@ -1,0 +1,243 @@
+:root {
+  --green: rgba(0,255,0,0.3);
+  --black-bg: rgba(0,0,0,0.4);
+  --yellow: rgba(238, 255, 0, 0.3);
+}
+
+/* Main page */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+  height: 100%;
+  color: white;
+}
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('../fonts/Minecraft.ttf') format('truetype');
+}
+
+@keyframes rainbow {
+  0% { color: red; }
+  24% { color: lime; }
+  40% { color: cyan; }
+  60% { color: blue; }
+  85% { color: purple; }
+  100% { color: red; }
+}
+
+#cursor {
+  font-weight: bold;
+  margin-left: 2px;
+  color: white;
+  display: inline-block;
+  height: 1em;
+  vertical-align: middle;
+  font-size: 1em;
+  overflow: hidden;
+  line-height: 0.9;
+}
+
+/* matrix greia */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Midten av siden */
+.center-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+}
+
+/* 0xd3adbeef */
+.main-text {
+  position: static;
+  margin-bottom: 2vh;
+  font-size: clamp(32px, 8vw, 64px);
+  font-family: 'Minecraft', monospace;
+  animation: rainbow 5s linear infinite;
+  z-index: 0;
+}
+
+/* Knapper */
+.button-row {
+  position: static;
+  margin-top: 0;
+  transform: none;
+  display: flex;
+  gap: 32px;
+  width: fit-content;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: row;
+  min-width: 384px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+.button-row, footer {
+    will-change: opacity;
+}
+
+.button-row.fade-in, 
+.footer.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.link-btn img, 
+.github-btn img {
+  height: 64px;
+  width: 64px;
+}
+
+.coffee-btn img {
+  height: 48px;
+  width: 48px;
+}
+
+.link-btn img, 
+.coffee-btn img {
+  border-radius: 16px; /* Knapper med avrundede hjørner */
+}
+
+.github-btn img {
+  border-radius: 50%; /* GitHub knappen er rund */
+}
+
+.link-btn img, 
+.coffee-btn img, 
+.github-btn img {
+  box-shadow: 0 2px 8px var(--black-bg);
+  transition: transform 0.2s;
+  object-fit: cover;
+
+  will-change: transform, box-shadow;
+}
+
+.link-btn img:hover, 
+.github-btn img:hover, 
+.coffee-btn img:hover {
+  transform: scale(1.18);
+}
+
+.link-btn img:hover, 
+.github-btn img:hover {
+  box-shadow: 0 8px 32px 16px var(--green);
+}
+
+.coffee-btn img:hover {
+  box-shadow: 0 8px 32px 16px var(--yellow);
+}
+
+.footer,
+.footer-flex,
+.footer-texts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+}
+
+.footer-flex {
+  gap: 12px;
+  width: fit-content;
+  margin: 0 auto;
+
+  flex-direction: row-reverse; /* Putt denna i mobil-media for å få ikonet over teksten */
+}
+
+.footer-texts p {
+  margin: 0;
+  animation: rainbow 5s linear infinite;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+/* telefon */
+@media (max-width: 768px) {
+  .center-container {
+    top: 20%;
+    transform: translate(-50%, 0);
+  }
+
+  .main-text {
+    font-size: 56px;
+    margin-bottom: 1.75vh;
+    text-align: center;
+    width: fit-content;
+  }
+
+  .button-row {
+    gap: 20px;
+  }
+
+  .link-btn img,
+  .github-btn img {
+    height: 48px;
+    width: 48px;
+  }
+
+  .link-btn img:hover,
+  .coffee-btn img:hover,
+  .github-btn img:hover {
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .footer-flex {
+    flex-direction: row-reverse;
+  }
+  .footer-texts p {
+    font-size: 14px;
+  }
+}
+
+/* mindre skjerm */
+@media (max-width: 1800px), (max-height: 768px) {
+  .footer-texts p {
+    font-size: 14px;
+  }
+  .coffee-btn img {
+    height: 32px;
+    width: 32px;
+
+    border-radius: 8px; /* Halv størrelse = halv border */
+  }
+}
