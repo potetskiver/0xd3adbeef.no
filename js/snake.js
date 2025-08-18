@@ -40,7 +40,7 @@ function showSnake() {
   canvas.height = canvasSize;
   canvas.style.border = "4px solid #0f0";
   canvas.style.background = "#222";
-  canvas.style.borderRadius = "24px";
+  //canvas.style.borderRadius = "24px";
   canvas.style.boxShadow = "0 8px 32px rgba(0,255,0,0.2)";
   canvas.style.position = "relative";
   overlay.appendChild(canvas);
@@ -59,6 +59,7 @@ function showSnake() {
   let growing = 0;
   let gameOver = false;
   let lastDirectionChange = 0;
+  let score = 0;
 
   function spawnFood() {
     let pos;
@@ -86,6 +87,11 @@ function showSnake() {
     });
     ctx.globalAlpha = 1;
 
+    ctx.fillStyle = "#fff";
+    ctx.font = `bold ${canvasSize/12}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.fillText(`Score: ${score}`, canvasSize / 2, canvasSize / 10);
+
     // Game over text
     if (gameOver) {
       ctx.fillStyle = "#fff";
@@ -98,7 +104,10 @@ function showSnake() {
   }
 
   function update() {
-    if (gameOver) return;
+    if (gameOver) { 
+      score = 0; 
+      return;
+    }
 
     // Move snake
     const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
@@ -111,7 +120,7 @@ function showSnake() {
     }
 
     // Check self collision
-    if (snake.some(s => s.x === head.x && s.y === head.y)) {
+    if (snake.some(s => s.x === head.x && s.y === head.y) && now - lastDirectionChange > 80) {
       gameOver = true;
       draw();
       return;
@@ -123,6 +132,7 @@ function showSnake() {
     if (head.x === food.x && head.y === food.y) {
       growing += 2;
       food = spawnFood();
+      score++;
     }
 
     if (growing > 0) {
@@ -149,17 +159,17 @@ function showSnake() {
     }else if(!gameOver && e == null) { 
         return; 
     }
-    if (now - lastDirectionChange < 50) return;
-    if (e.key === "ArrowUp" && direction.y !== 1) {
+    if (now - lastDirectionChange < 30) return;
+    if (e.key === "ArrowUp" || e.key === "w" && direction.y !== 1) {
       direction = {x: 0, y: -1};
       lastDirectionChange = now;
-    } else if (e.key === "ArrowDown" && direction.y !== -1) {
+    } else if (e.key === "ArrowDown" || e.key === "s" && direction.y !== -1) {
       direction = {x: 0, y: 1};
       lastDirectionChange = now;
-    } else if (e.key === "ArrowLeft" && direction.x !== 1) {
+    } else if (e.key === "ArrowLeft" || e.key === "a" && direction.x !== 1) {
       direction = {x: -1, y: 0};
       lastDirectionChange = now;
-    } else if (e.key === "ArrowRight" && direction.x !== -1) {
+    } else if (e.key === "ArrowRight" || e.key === "d" && direction.x !== -1) {
       direction = {x: 1, y: 0};
       lastDirectionChange = now;
     }
