@@ -13,6 +13,11 @@ const shortcuts = [
     keys: ["g", "i", "t", "h", "u", "b"],
     index: 0,
     action: () => window.location.href = "https://github.com/potetskiver"
+  },
+  {
+    keys: ["o", "l", "d"],
+    index: 0,
+    action: () => window.location.href = "https://0xd3adbeef.no/old"
   }
 ];
 
