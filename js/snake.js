@@ -49,7 +49,6 @@ function showSnake() {
 
   // Remove overlay on click or after 60 seconds
   overlay.addEventListener("click", () => overlay.remove());
-  setTimeout(() => overlay.remove(), 60000);
 
   // Snake game logic
   const ctx = canvas.getContext("2d");
