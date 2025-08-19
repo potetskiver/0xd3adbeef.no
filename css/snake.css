@@ -1,0 +1,78 @@
+:root {
+  --green: rgba(0,255,0,0.3);
+  --black-bg: rgba(0,0,0,0.4);
+  --yellow: rgba(238, 255, 0, 0.3);
+}
+
+/* Main page */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+  height: 100%;
+  color: white;
+}
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('../fonts/Minecraft.ttf') format('truetype');
+}
+
+/* Midten av siden */
+.center-container {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+}
+
+/* Midten av siden */
+.snake {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+}
+
+.score {
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 24px;
+  color: #0f0;
+  margin-top: 10px;
+}
+
+
+/* telefon */
+@media (max-width: 768px) {
+  .center-container {
+    top: 20%;
+    transform: translate(-50%, 0);
+  }
+
+  .main-text {
+    font-size: 56px;
+    margin-bottom: 1.75vh;
+    text-align: center;
+    width: fit-content;
+  }
+}
+
+/* mindre skjerm */
+@media (max-width: 1800px), (max-height: 768px) {
+  .footer-texts p {
+    font-size: 14px;
+  }
+}

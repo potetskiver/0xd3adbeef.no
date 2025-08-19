@@ -18,7 +18,12 @@ const shortcuts = [
     keys: ["o", "l", "d"],
     index: 0,
     action: () => window.location.href = "https://0xd3adbeef.no/old"
-  }
+  },
+  {
+    keys: ["s", "n", "a", "k", "e"],
+    index: 0,
+    action: () => window.location.href = "https://test.0xd3adbeef.no/snake.html"
+  },
 ];
 
 document.addEventListener("keydown", function(e) {

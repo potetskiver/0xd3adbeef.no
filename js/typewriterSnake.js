@@ -1,4 +1,4 @@
-const textToType = "0xd3adbeef";
+const textToType = "Snake";
 let charIndex = 0;
 const speed = 150; // Milliseconds per character
 
