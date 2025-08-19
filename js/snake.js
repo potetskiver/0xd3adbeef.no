@@ -9,6 +9,8 @@ snakeCanvas.style.background = "#222";
 snakeCanvas.style.boxShadow = "0 8px 32px rgba(0,255,0,0.2)";
 snakeCanvas.style.position = "relative";
 
+document.documentElement.style.setProperty("--canvas-size", canvasSize + "px");
+
 
 // Snake game logic
 const ctx = snakeCanvas.getContext("2d");
@@ -20,6 +22,12 @@ let gameOver = false;
 let lastDirectionChange = 0;
 let score = 0;
 let oldscore = score;
+
+let highscore = loadHighScore();
+let oldhighscore = highscore
+
+let username = '';
+
 
 function spawnFood() {
   let pos;
@@ -59,10 +67,10 @@ function draw() {
 }
 
 function update() {
-  const now = Date.now();
   if (gameOver) { 
     oldscore = score;
     score = 0;
+    updateUsername();
     updateScore();
     return;
   }
@@ -78,7 +86,7 @@ function update() {
   }
 
   // Check self collision
-  if (snake.some(s => s.x === head.x && s.y === head.y) &&  lastDirectionChange > 600) {
+  if (snake.some(s => s.x === head.x && s.y === head.y) && Date.now() - lastDirectionChange > 60) {
     gameOver = true;
     draw();
     return;
@@ -100,6 +108,12 @@ function update() {
     snake.pop();
   }
 
+  if(score > highscore){
+      highscore = score;
+      saveHighScore();
+      updateScore();
+  }
+
   draw();
 }
 
@@ -115,13 +129,14 @@ function handleKey(e) {
     score = 0;
     oldscore = score;
     updateScore();
+    saveHighScore();
     gameOver = false;
     draw();
     return;
   }else if(!gameOver && e == null) { 
       return; 
   }
-  if (now - lastDirectionChange < 100) return;
+  if (now - lastDirectionChange < 60) return;
   if (e.key === "ArrowUp" || e.key === "w") {
     if(direction.y !== 1){
       direction = {x: 0, y: -1};
@@ -158,6 +173,35 @@ let interval = setInterval(update, 100);
 
 function updateScore() {
   document.getElementById("score").innerText = `Score: ${score}`;
+  document.getElementById("highscore").innerText = `Highscore: ${highscore}`;
 }
 
+function loadHighScore() {
+  let savedScore = localStorage.getItem("highscore");
+  return savedScore ? parseInt(savedScore) : 0;
+}
+
+function saveHighScore() {
+    localStorage.setItem("highscore", highscore);
+    updateScore();
+}
+
+function updateUsername() {
+  if(username == null){
+    username = prompt("Hva vil du kalle deg?");
+
+    localStorage.setItem("username", username);
+  }else{
+    username = localStorage.getItem("username");
+  }
+
+  if(username != null){
+    document.getElementById("username").innerText = `Navn: ${username}`;
+  }else{
+    document.getElementById("username").innerText = `Navn: Usatt`;
+  }
+}
+
+updateScore();
+updateUsername();
 draw();

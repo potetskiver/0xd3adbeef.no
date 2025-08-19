@@ -22,7 +22,7 @@ const shortcuts = [
   {
     keys: ["s", "n", "a", "k", "e"],
     index: 0,
-    action: () => window.location.href = "https://0xd3adbeef.no/snake.html"
+    action: () => window.location.href = "https://test.0xd3adbeef.no/snake.html"
   },
 ];
 

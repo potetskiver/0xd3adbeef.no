@@ -23,7 +23,7 @@ html, body {
 /* Midten av siden */
 .center-container {
   position: absolute;
-  top: 10%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -30%);
   display: flex;
@@ -33,7 +33,7 @@ html, body {
   min-width: 0;
 }
 
-/* Snake */
+/* Midten av siden */
 .snake {
   position: absolute;
   top: 40%;
@@ -47,11 +47,25 @@ html, body {
 }
 
 .score {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--canvas-size, 600px); /* så de følger bredden på canvas */
   font-family: 'sans-serif';
   font-weight: bold;
   font-size: 24px;
   color: #0f0;
   margin-top: 10px;
+}
+
+.username {
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 24px;
+  color: #0f0;
+  margin-top: 10px;
+  width: 100%;
+  max-width: var(--canvas-size, 600px); /* så den følger bredden på canvas */
 }
 
 
