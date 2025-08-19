@@ -59,6 +59,7 @@ function draw() {
 }
 
 function update() {
+  const now = Date.now();
   if (gameOver) { 
     oldscore = score;
     score = 0;
@@ -77,7 +78,7 @@ function update() {
   }
 
   // Check self collision
-  if (snake.some(s => s.x === head.x && s.y === head.y) && now - lastDirectionChange > 60) {
+  if (snake.some(s => s.x === head.x && s.y === head.y) &&  lastDirectionChange > 600) {
     gameOver = true;
     draw();
     return;

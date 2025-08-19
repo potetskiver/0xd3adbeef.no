@@ -33,7 +33,7 @@ html, body {
   min-width: 0;
 }
 
-/* Midten av siden */
+/* Snake */
 .snake {
   position: absolute;
   top: 40%;
