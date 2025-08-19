@@ -121,7 +121,7 @@ function handleKey(e) {
   }else if(!gameOver && e == null) { 
       return; 
   }
-  if (now - lastDirectionChange < 60) return;
+  if (now - lastDirectionChange < 100) return;
   if (e.key === "ArrowUp" || e.key === "w") {
     if(direction.y !== 1){
       direction = {x: 0, y: -1};
