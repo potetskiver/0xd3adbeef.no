@@ -97,6 +97,12 @@ html, body {
   margin-bottom: 6px;
 }
 
+#leaderboard-leader {
+  font-style: bold;
+  margin-top: 10px;
+  text-align: center; /* ensures the text is centered under the list */
+}
+
 
 /* idk this
 @media (max-width: 768px) {

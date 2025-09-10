@@ -283,17 +283,29 @@ async function updateLeaderboard() {
 
         const data = await res.json();
         const list = document.getElementById("leaderboard-list");
+        const leaderText = document.getElementById("leaderboard-leader");
         list.innerHTML = "";
+
+        if (data.length === 0) {
+            leaderText.innerText = "No scores yet!";
+            return;
+        }
 
         data.slice(0, 10).forEach(entry => {
             const li = document.createElement("li");
             li.innerText = `${entry.name}: ${entry.score}`;
             list.appendChild(li);
         });
+
+        // Show current leader
+        const topPlayer = data[0];
+        leaderText.innerText = `${topPlayer.name} leder!`;
+
     } catch (err) {
         console.error("Error loading leaderboard:", err);
     }
 }
+
 setInterval(updateLeaderboard, 60000); // Update every minute
 
 
