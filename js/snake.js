@@ -23,11 +23,7 @@ let lastDirectionChange = 0;
 let score = 0;
 let oldscore = score;
 
-let highscore = loadHighScore();
-let oldhighscore = highscore
-
 let username = '';
-
 
 function spawnFood() {
   let pos;
@@ -70,6 +66,12 @@ function update() {
   if (gameOver) { 
     oldscore = score;
     score = 0;
+
+    if(oldscore > highscore){
+      highscore = oldscore;
+      saveHighScore();
+    }
+
     updateUsername();
     updateScore();
     return;
@@ -110,7 +112,6 @@ function update() {
 
   if(score > highscore){
       highscore = score;
-      saveHighScore();
       updateScore();
   }
 
@@ -171,6 +172,17 @@ function handleKey(e) {
 // Game loop
 let interval = setInterval(update, 100);
 
+let gameToken = "";
+
+function getGameToken() {
+  return fetch("/api/get-token")
+    .then(res => res.json())
+    .then(data => {
+      gameToken = data.token;
+    });
+}
+
+
 function updateScore() {
   document.getElementById("score").innerText = `Score: ${score}`;
   document.getElementById("highscore").innerText = `Highscore: ${highscore}`;
@@ -181,27 +193,90 @@ function loadHighScore() {
   return savedScore ? parseInt(savedScore) : 0;
 }
 
-function saveHighScore() {
-    localStorage.setItem("highscore", highscore);
+async function saveHighScore() {
     updateScore();
+
+    if (!username || username == null) {
+        updateUsername(); // ensure both exist
+        return;
+    }
+
+    if (!gameToken) {
+        await getGameToken();
+    }
+
+    fetch("/api/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "x-game-token": gameToken
+        },
+        body: JSON.stringify({ name: username, score: highscore })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) console.log("Score submitted!");
+        else console.warn("Score submission failed", data.error);
+    })
+    .catch(err => console.error("Error submitting score:", err));
+    gameToken = "";
 }
+
+async function getHighScore(name) {
+    // Use stored username if none provided
+    if (!name) {
+        name = localStorage.getItem("username");
+        if (!name) return 0;
+    }
+
+    try {
+        const res = await fetch(`/api/score/${encodeURIComponent(name)}`);
+        if (!res.ok) {
+            console.warn(`Failed to fetch highscore for ${name}: ${res.status}`);
+            return 0;
+        }
+
+        const data = await res.json();
+        // Ensure data.score is a number
+        return typeof data.score === "number" ? data.score : 0;
+    } catch (err) {
+        console.error("Error fetching highscore:", err);
+        return 0;
+    }
+    
+}
+
 
 function updateUsername() {
-  if(username == null){
-    username = prompt("Hva vil du kalle deg?");
+    // Load from localStorage
+    let storedName = localStorage.getItem("username");
 
-    localStorage.setItem("username", username);
-  }else{
-    username = localStorage.getItem("username");
-  }
+    if (storedName && storedName.trim() !== "") {
+        username = storedName;
+    } else {
+        // Ask user
+        username = prompt("Hva vil du kalle deg?");
+        if (username && username.trim() !== "") {
+            localStorage.setItem("username", username);
+        } else {
+            username = "Usatt"; // fallback
+        }
+    }
 
-  if(username != null){
     document.getElementById("username").innerText = `Navn: ${username}`;
-  }else{
-    document.getElementById("username").innerText = `Navn: Usatt`;
-  }
 }
 
-updateScore();
-updateUsername();
-draw();
+async function initGame() {
+    // Ensure username exists
+    if (!username) {
+        updateUsername();
+    }
+
+    // Wait for highscore from server
+    highscore = await getHighScore(username);
+
+    updateScore();
+    draw();
+}
+
+initGame();
