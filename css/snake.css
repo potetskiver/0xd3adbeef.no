@@ -101,6 +101,16 @@ html, body {
   font-style: bold;
   margin-top: 10px;
   text-align: center; /* ensures the text is centered under the list */
+  background: linear-gradient(90deg, red, yellow, #0f0, rgb(0, 128, 255), rgb(233, 2, 233), violet);
+  background-size: 400% 100%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 3s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 400% 0%; }
 }
 
 
