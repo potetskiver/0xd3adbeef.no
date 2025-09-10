@@ -59,7 +59,7 @@ html, body {
   width: 100%;
   max-width: var(--canvas-size, 600px); /* så de følger bredden på canvas */
   margin-top: 10px;
-  
+
   font-family: 'sans-serif';
   font-weight: bold;
   font-size: 24px;
@@ -71,8 +71,34 @@ html, body {
   outline: 2px solid #0f0;
 }
 
+.leaderboard {
+  position: absolute;
+  top: 20.5%; /* roughly aligns with snake canvas */
+  left: 70%; /* adjust based on your screen size / canvas width */
+  color: #0f0;
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 20px;
+  width: 200px;
+}
 
-/* telefon */
+.leaderboard h3 {
+  margin: 0 0 10px 0;
+  text-align: center;
+  font-size: 24px;
+}
+
+.leaderboard ol {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.leaderboard li {
+  margin-bottom: 6px;
+}
+
+
+/* idk this
 @media (max-width: 768px) {
   .center-container {
     top: 20%;
@@ -87,9 +113,8 @@ html, body {
   }
 }
 
-/* mindre skjerm */
 @media (max-width: 1800px), (max-height: 768px) {
   .footer-texts p {
     font-size: 14px;
   }
-}
+}*/

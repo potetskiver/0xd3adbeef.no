@@ -74,6 +74,7 @@ function update() {
 
     updateUsername();
     updateScore();
+    updateLeaderboard();
     return;
   }
 
@@ -275,6 +276,26 @@ function clearUsername() {
 
 document.getElementById("clear-username").addEventListener("click", clearUsername);
 
+async function updateLeaderboard() {
+    try {
+        const res = await fetch("/api/leaderboard");
+        if (!res.ok) throw new Error("Failed to fetch leaderboard");
+
+        const data = await res.json();
+        const list = document.getElementById("leaderboard-list");
+        list.innerHTML = "";
+
+        data.slice(0, 10).forEach(entry => {
+            const li = document.createElement("li");
+            li.innerText = `${entry.name}: ${entry.score}`;
+            list.appendChild(li);
+        });
+    } catch (err) {
+        console.error("Error loading leaderboard:", err);
+    }
+}
+setInterval(updateLeaderboard, 60000); // Update every minute
+
 
 async function initGame() {
     // Ensure username exists
@@ -285,6 +306,7 @@ async function initGame() {
     // Wait for highscore from server
     highscore = await getHighScore(username);
 
+    updateLeaderboard();
     updateScore();
     draw();
 }

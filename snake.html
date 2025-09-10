@@ -13,10 +13,11 @@
 <body>
   <canvas id="matrix"></canvas>
   <div class="center-container">
-    <div id="maintext" onclick="window.location.href='https://0xd3adbeef.no/old'" class="main-text"> <!-- Clickable text -->
+    <div id="maintext" onclick="window.location.href='https://0xd3adbeef.no/'" class="main-text"> <!-- Clickable text -->
       <script src="js/typewriterSnake.js"></script>
     </div>
   </div>
+
 
   <div class="snake">
     <canvas id="snake"></canvas>
@@ -30,7 +31,14 @@
       <span id="username">Navn: </span>
       <button id="clear-username" class="reset">Reset</button>
     </div>
+  </div>
 
+  <div class="leaderboard">
+    <h3>Leaderboard</h3>
+    <ol id="leaderboard-list">
+      <!-- Top 10 scores will go here -->
+    </ol>
+    <p id="leaderboard-leader" style="margin-top:10px; font-style:italic;">asdasd</p>
   </div>
 
   <div class="footer">
