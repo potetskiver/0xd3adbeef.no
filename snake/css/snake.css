@@ -4,6 +4,15 @@
   --yellow: rgba(238, 255, 0, 0.3);
 }
 
+@keyframes rainbow {
+  0% { color: red; }
+  24% { color: lime; }
+  40% { color: cyan; }
+  60% { color: blue; }
+  85% { color: purple; }
+  100% { color: red; }
+}
+
 /* Main page */
 
 html, body {
@@ -17,7 +26,7 @@ html, body {
 
 @font-face {
   font-family: 'Minecraft';
-  src: url('../fonts/Minecraft.ttf') format('truetype');
+  src: url('https://0xd3adbeef.no/fonts/Minecraft.ttf') format('truetype');
 }
 
 /* Midten av siden */
@@ -31,6 +40,15 @@ html, body {
   align-items: center;
   width: fit-content;
   min-width: 0;
+}
+
+.main-text {
+  position: static;
+  margin-bottom: 2vh;
+  font-size: 64px;
+  font-family: 'Minecraft', monospace;
+  animation: rainbow 5s linear infinite;
+  z-index: 0;
 }
 
 /* Midten av siden */
@@ -105,10 +123,10 @@ html, body {
   background-size: 400% 100%;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: rainbow 3s linear infinite;
+  animation: rainbowleaderboard 3s linear infinite;
 }
 
-@keyframes rainbow {
+@keyframes rainbowleaderboard {
   0% { background-position: 0% 0%; }
   100% { background-position: 400% 0%; }
 }
