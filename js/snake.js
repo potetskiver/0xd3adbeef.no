@@ -266,6 +266,16 @@ function updateUsername() {
     document.getElementById("username").innerText = `Navn: ${username}`;
 }
 
+function clearUsername() {
+    localStorage.removeItem("username");
+    username = "";
+    updateUsername();
+    initGame();
+}
+
+document.getElementById("clear-username").addEventListener("click", clearUsername);
+
+
 async function initGame() {
     // Ensure username exists
     if (!username) {

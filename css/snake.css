@@ -46,26 +46,29 @@ html, body {
   min-width: 0;
 }
 
-.score {
+.score,
+.username,
+.reset {
+  color:#0f0;
+}
+
+.score,
+.username {
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: var(--canvas-size, 600px); /* så de følger bredden på canvas */
+  margin-top: 10px;
+  
   font-family: 'sans-serif';
   font-weight: bold;
   font-size: 24px;
-  color: #0f0;
-  margin-top: 10px;
 }
 
-.username {
-  font-family: 'sans-serif';
-  font-weight: bold;
-  font-size: 24px;
-  color: #0f0;
-  margin-top: 10px;
-  width: 100%;
-  max-width: var(--canvas-size, 600px); /* så den følger bredden på canvas */
+.reset {
+  background-color: transparent;
+  border: none;
+  outline: 2px solid #0f0;
 }
 
 
