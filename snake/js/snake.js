@@ -15,13 +15,14 @@ document.documentElement.style.setProperty("--canvas-size", canvasSize + "px");
 // Snake game logic
 const ctx = snakeCanvas.getContext("2d");
 let snake = [{x: Math.floor(cells/2), y: Math.floor(cells/2)}];
-let direction = {x: 1, y: 0};
 let food = spawnFood();
 let growing = 0;
 let gameOver = false;
-let lastDirectionChange = 0;
 let score = 0;
 let oldscore = score;
+
+let direction = {x: 1, y: 0};
+let inputQueue = [];
 
 let username = '';
 
@@ -79,6 +80,15 @@ function update() {
   }
 
   // Move snake
+
+  while (inputQueue.length > 0) {
+    const nextDir = inputQueue.shift();
+    if (!(nextDir.x === -direction.x && nextDir.y === -direction.y)) {
+      direction = nextDir;
+      break;
+    }
+  }
+
   const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
 
   // Check wall collision
@@ -89,7 +99,7 @@ function update() {
   }
 
   // Check self collision
-  if (snake.some(s => s.x === head.x && s.y === head.y) && Date.now() - lastDirectionChange > 60) {
+  if (snake.some(s => s.x === head.x && s.y === head.y)) {
     gameOver = true;
     draw();
     return;
@@ -126,10 +136,11 @@ function handleKey(e) {
   if (gameOver && e != null) {
     snake = [{x: Math.floor(cells/2), y: Math.floor(cells/2)}];
     direction = {x: 1, y: 0};
+    inputQueue = [];
     food = spawnFood();
     growing = 0;
-    score = 0;
     oldscore = score;
+    score = 0;
     updateScore();
     saveHighScore();
     gameOver = false;
@@ -138,34 +149,16 @@ function handleKey(e) {
   }else if(!gameOver && e == null) { 
       return; 
   }
-  if (now - lastDirectionChange < 60) return;
-  if (e.key === "ArrowUp" || e.key === "w") {
-    if(direction.y !== 1){
-      direction = {x: 0, y: -1};
-      lastDirectionChange = now;
-    }else{
-      direction = {x: 0, y: 1};
-    }
-  } else if (e.key === "ArrowDown" || e.key === "s") {
-    if(direction.y !== -1){
-      direction = {x: 0, y: 1};
-      lastDirectionChange = now;
-    }else{
-      direction = {x: 0, y: -1};
-    }
-  } else if (e.key === "ArrowLeft" || e.key === "a") {
-    if(direction.x !== 1) {
-      direction = {x: -1, y: 0};
-      lastDirectionChange = now;
-    }else {
-      direction = {x: 1, y: 0};
-    }
-  } else if (e.key === "ArrowRight" || e.key === "d") {
-    if(direction.x !== -1) {
-      direction = {x: 1, y: 0};
-      lastDirectionChange = now;
-    }else {
-      direction = {x: -1, y: 0};
+
+  let newDir;
+  if (e.key === "ArrowUp" || e.key === "w") newDir = {x: 0, y: -1};
+  else if (e.key === "ArrowDown" || e.key === "s") newDir = {x: 0, y: 1};
+  else if (e.key === "ArrowLeft" || e.key === "a") newDir = {x: -1, y: 0};
+  else if (e.key === "ArrowRight" || e.key === "d") newDir = {x: 1, y: 0};
+
+  if (newDir) {
+    if (inputQueue.length < 2) {
+      inputQueue.push(newDir);
     }
   }
 }
