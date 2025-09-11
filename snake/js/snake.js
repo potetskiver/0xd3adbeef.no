@@ -1,5 +1,5 @@
-const canvasSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.5);
-const cells = 24;
+const canvasSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.55);
+const cells = 32;
 const gridSize = canvasSize / cells;
 const snakeCanvas = document.getElementById("snake");
 snakeCanvas.width = canvasSize;
@@ -284,7 +284,7 @@ async function updateLeaderboard() {
             return;
         }
 
-        data.slice(0, 10).forEach(entry => {
+        data.slice(0, 15).forEach(entry => {
             const li = document.createElement("li");
             li.innerText = `${entry.name}: ${entry.score}`;
             list.appendChild(li);

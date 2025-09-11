@@ -32,7 +32,7 @@ html, body {
 /* Midten av siden */
 .center-container {
   position: absolute;
-  top: 15%;
+  top: 12%;
   left: 50%;
   transform: translate(-50%, -30%);
   display: flex;
@@ -91,7 +91,7 @@ html, body {
 
 .leaderboard {
   position: absolute;
-  top: 20.5%; /* roughly aligns with snake canvas */
+  top: 19%; /* roughly aligns with snake canvas */
   left: 70%; /* adjust based on your screen size / canvas width */
   color: #0f0;
   font-family: 'sans-serif';
