@@ -74,7 +74,7 @@ function update() {
 
     updateUsername();
     updateScore();
-    updateLeaderboard();
+    //updateLeaderboard();
     return;
   }
 
@@ -306,7 +306,7 @@ async function updateLeaderboard() {
     }
 }
 
-setInterval(updateLeaderboard, 60000); // Update every minute
+setInterval(updateLeaderboard, 30000); // Update every half-minute
 
 
 async function initGame() {
