@@ -275,19 +275,29 @@ async function updateLeaderboard() {
         if (!res.ok) throw new Error("Failed to fetch leaderboard");
 
         const data = await res.json();
-        const list = document.getElementById("leaderboard-list");
+        const left = document.getElementById("leaderboard-list-left");
+        const right = document.getElementById("leaderboard-list-right");
         const leaderText = document.getElementById("leaderboard-leader");
-        list.innerHTML = "";
+
+        left.innerHTML = "";
+        right.innerHTML = "";
 
         if (data.length === 0) {
             leaderText.innerText = "No scores yet!";
             return;
         }
 
-        data.slice(0, 15).forEach(entry => {
+        data.slice(0, 10).forEach((entry, i) => {
             const li = document.createElement("li");
-            li.innerText = `${entry.name}: ${entry.score}`;
-            list.appendChild(li);
+            li.innerText = `${i + 1}. ${entry.name}: ${entry.score}`;
+            left.appendChild(li);
+        });
+
+        // Right column (next 10)
+        data.slice(10, 20).forEach((entry, i) => {
+            const li = document.createElement("li");
+            li.innerText = `${i + 11}. ${entry.name}: ${entry.score}`;
+            right.appendChild(li);
         });
 
         // Show current leader

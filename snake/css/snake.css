@@ -97,7 +97,7 @@ html, body {
   font-family: 'sans-serif';
   font-weight: bold;
   font-size: 20px;
-  width: 200px;
+  width: 400px;
 }
 
 .leaderboard h3 {
@@ -106,13 +106,17 @@ html, body {
   font-size: 24px;
 }
 
-.leaderboard ol {
-  padding-left: 20px;
-  margin: 0;
+.leaderboard-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* adds space between columns */
 }
 
-.leaderboard li {
-  margin-bottom: 6px;
+.leaderboard-columns ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 50%; /* each column takes half of the parent width */
 }
 
 #leaderboard-leader {
@@ -124,6 +128,10 @@ html, body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: rainbowleaderboard 3s linear infinite;
+}
+
+.premie {
+  text-align: center;
 }
 
 @keyframes rainbowleaderboard {
