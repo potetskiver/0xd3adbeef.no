@@ -132,21 +132,13 @@ html, body {
 }
 
 
-/* idk this
-@media (max-width: 768px) {
-  .center-container {
-    top: 20%;
-    transform: translate(-50%, 0);
-  }
 
-  .main-text {
-    font-size: 56px;
-    margin-bottom: 1.75vh;
-    text-align: center;
-    width: fit-content;
+@media (max-width: 768px) {
+  .leaderboard {
+    display: none;
   }
 }
-
+/*
 @media (max-width: 1800px), (max-height: 768px) {
   .footer-texts p {
     font-size: 14px;
