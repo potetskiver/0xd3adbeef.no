@@ -11,10 +11,8 @@ function typeWriter() {
   } else {
     blinkCursor();
 
-    const buttonRow = document.querySelector('.button-row');
-    if (buttonRow) {
-      buttonRow.classList.add('fade-in');
-    }
+    const buttonRows = document.querySelectorAll('.button-row');
+    buttonRows.forEach(row => row.classList.add('fade-in'));
 
     const footer = document.querySelector('.footer');
     if (footer) {
