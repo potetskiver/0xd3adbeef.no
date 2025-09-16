@@ -21,6 +21,8 @@ let gameOver = false;
 let score = 0;
 let oldscore = score;
 
+let gameSpeed = 80;
+
 let direction = {x: 1, y: 0};
 let inputQueue = [];
 
@@ -164,7 +166,7 @@ function handleKey(e) {
 }
 
 // Game loop
-let interval = setInterval(update, 85);
+let interval = setInterval(update, gameSpeed);
 
 let gameToken = "";
 
