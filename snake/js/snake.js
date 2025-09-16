@@ -164,7 +164,7 @@ function handleKey(e) {
 }
 
 // Game loop
-let interval = setInterval(update, 100);
+let interval = setInterval(update, 85);
 
 let gameToken = "";
 
