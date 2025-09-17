@@ -1,0 +1,159 @@
+:root {
+  --green: rgba(0,255,0,0.3);
+  --black-bg: rgba(0,0,0,0.4);
+  --yellow: rgba(238, 255, 0, 0.3);
+}
+
+@keyframes rainbow {
+  0% { color: red; }
+  24% { color: lime; }
+  40% { color: cyan; }
+  60% { color: blue; }
+  85% { color: purple; }
+  100% { color: red; }
+}
+
+/* Main page */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+  height: 100%;
+  color: white;
+
+  background-image: url('https://0xd3adbeef.no/tetris/images/redsquare.jpg');
+  background-size: cover;         /* Make image cover the entire screen */
+  background-position: center;    /* Center the image */
+  background-repeat: no-repeat;   /* Prevent tiling */
+}
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('https://0xd3adbeef.no/fonts/Minecraft.ttf') format('truetype');
+}
+
+/* Midten av siden */
+.center-container {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+}
+
+.main-text {
+  position: static;
+  margin-bottom: 2vh;
+  font-size: 64px;
+  font-family: 'Minecraft', monospace;
+  animation: rainbow 5s linear infinite;
+  z-index: 0;
+}
+
+/* Midten av siden */
+.tetris {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+}
+
+.score,
+.username,
+.reset {
+  color:#0f0;
+}
+
+.score,
+.username {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--canvas-size, 600px); /* så de følger bredden på canvas */
+  margin-top: 10px;
+
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.reset {
+  background-color: transparent;
+  border: none;
+  outline: 2px solid #0f0;
+}
+
+.leaderboard {
+  position: absolute;
+  top: 19%; /* roughly aligns with snake canvas */
+  left: 70%; /* adjust based on your screen size / canvas width */
+  color: #0f0;
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 20px;
+  width: 400px;
+}
+
+.leaderboard h3 {
+  margin: 0 0 10px 0;
+  text-align: center;
+  font-size: 24px;
+}
+
+.leaderboard-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* adds space between columns */
+}
+
+.leaderboard-columns ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 50%; /* each column takes half of the parent width */
+}
+
+#leaderboard-leader {
+  font-style: bold;
+  margin-top: 10px;
+  text-align: center; /* ensures the text is centered under the list */
+  background: linear-gradient(90deg, red, yellow, #0f0, rgb(0, 128, 255), rgb(233, 2, 233), violet);
+  background-size: 400% 100%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowleaderboard 3s linear infinite;
+}
+
+.premie {
+  text-align: center;
+}
+
+@keyframes rainbowleaderboard {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 400% 0%; }
+}
+
+
+
+@media (max-width: 768px) {
+  .leaderboard {
+    display: none;
+  }
+}
+/*
+@media (max-width: 1800px), (max-height: 768px) {
+  .footer-texts p {
+    font-size: 14px;
+  }
+}*/

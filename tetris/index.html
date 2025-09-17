@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="author" content="0xd3adbeef" />
+  <meta name="keywords" content="0xd3adbeef, tetris" />
+  <meta name="description" content="0xd3adbeef tetris" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>0xd3adbeef</title>
+  <link rel="stylesheet" href="https://0xd3adbeef.no/css/style.css?v=7" />
+  <link rel="stylesheet" href="css/tetris.css?v=1" />
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="center-container">
+    <div id="maintext" onclick="window.location.href='https://0xd3adbeef.no/'" class="main-text"> <!-- Clickable text -->
+      <script src="js/typewriterTetris.js"></script>
+    </div>
+  </div>
+
+
+  <div class="tetris">
+    <canvas id="tetris"></canvas>
+
+    <div class="score">
+      <span id="score">Score: 0</span>
+      <span id="highscore">Highscore: 0</span>
+    </div>
+
+    <div class="username">
+      <span id="username">Navn: </span>
+      <button id="clear-username" class="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="leaderboard">
+    <h3>Leaderboard</h3>
+    <div class="leaderboard-columns">
+      <ol id="leaderboard-list-left"></ol>
+      <ol id="leaderboard-list-right"></ol>
+    </div>
+    <p id="leaderboard-leader"></p>
+    <p class="premie">Første til 120 vinner en Snickers!</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-flex">
+      <div class="footer-texts">
+        <p onclick="window.location.href='mailto:alex@0xd3adbeef.no'">© 2025 0xd3adbeef</p>
+        <p>Made with ❤️ by Alexander</p>
+      </div>
+    </div>
+  </div>
+  <!--<script src="js/tetrisMatrix.js"></script> -->
+  <script src="js/tetris.js"></script>
+</body>
+</html>

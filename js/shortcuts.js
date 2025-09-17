@@ -24,6 +24,11 @@ const shortcuts = [
     index: 0,
     action: () => window.location.href = "https://0xd3adbeef.no/snake"
   },
+    {
+    keys: ["t", "e", "t", "r", "i", "s"],
+    index: 0,
+    action: () => window.location.href = "https://0xd3adbeef.no/tetris"
+  },
 ];
 
 document.addEventListener("keydown", function(e) {
