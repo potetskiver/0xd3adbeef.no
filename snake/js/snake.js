@@ -197,7 +197,7 @@ async function saveHighScore() {
         return;
     }
 
-    if(score <= 0) return;
+    //if(oldscore <= 0) return;
 
     if (!gameToken) {
         await getGameToken();
