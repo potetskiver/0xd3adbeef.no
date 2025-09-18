@@ -311,8 +311,8 @@ async function updateLeaderboard() {
     }
 }
 
-setInterval(updateLeaderboard, 30000); // Update every half-minute
-
+var leaderboardInterval = setInterval(updateLeaderboard, 30000);
+ // Update every half-minute
 
 async function initGame() {
     // Ensure username exists
