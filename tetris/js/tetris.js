@@ -1,5 +1,5 @@
 const cols = 12;
-const rows = 20;
+const rows = 24;
 const maxWidth = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.45);
 const gridSize = 24;
 const canvasWidth = gridSize * cols;
@@ -29,6 +29,7 @@ const colors = ["cyan","red","green","yellow","purple","blue","orange"];
 let grid = Array.from({length: rows}, () => Array(cols).fill(0));
 let current, currentColor, x, y, gameOver = false, score = 0, highscore = 0;
 let username = "";
+let promptingName = false;
 
 // Scoring constants
 const SCORE_SOFT_DROP = 1;      // Each manual down movement
@@ -40,12 +41,16 @@ function updateUsername() {
   let storedName = localStorage.getItem("username");
   if (storedName && storedName.trim() !== "") {
     username = storedName;
-  } else {
+    promptingName = false;
+  } else if (!promptingName) {
+    promptingName = true;
     username = prompt("Hva vil du kalle deg?");
     if (username && username.trim() !== "") {
       localStorage.setItem("username", username);
+      promptingName = false;
     } else {
       username = "Usatt";
+      promptingName = false;
     }
   }
   document.getElementById("username").innerText = `Navn: ${username}`;
@@ -199,20 +204,49 @@ function clearLines() {
     }
   }
   if (lines) {
-    // Give score based on number of lines cleared at once
     score += SCORE_LINE_CLEAR[Math.min(lines, SCORE_LINE_CLEAR.length) - 1];
   }
 }
 
 function rotate(shape) {
-  // Clockwise rotation
-  return shape[0].map((_, i) => shape.map(row => row[row.length - 1 - i]));
+  const rows = shape.length;
+  const cols = shape[0].length;
+  let rotated = [];
+  for (let c = 0; c < cols; c++) {
+    rotated[c] = [];
+    for (let r = rows - 1; r >= 0; r--) {
+      rotated[c][rows - 1 - r] = shape[r][c];
+    }
+  }
+  return rotated;
+}
+
+function tryRotate() {
+  const rotated = rotate(current);
+  if (!collides(x, y, rotated)) {
+    current = rotated;
+    return;
+  }
+  const kicks = [
+    {dx: -1, dy: 0},
+    {dx: 1, dy: 0},
+    {dx: 0, dy: -1},
+    {dx: 0, dy: 1}
+  ];
+  for (const kick of kicks) {
+    if (!collides(x + kick.dx, y + kick.dy, rotated)) {
+      x += kick.dx;
+      y += kick.dy;
+      current = rotated;
+      return;
+    }
+  }
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  // Draw grid
+  // what the fuck
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       if (grid[r][c]) {
@@ -224,7 +258,6 @@ function draw() {
     }
   }
 
-  // Draw current tetromino
   if (!gameOver) {
     ctx.fillStyle = currentColor;
     for (let r = 0; r < current.length; r++) {
@@ -238,7 +271,6 @@ function draw() {
     }
   }
 
-  // Game over text
   if (gameOver) {
     ctx.fillStyle = "#fff";
     ctx.font = `bold ${canvasWidth/10}px sans-serif`;
@@ -251,8 +283,7 @@ function draw() {
 
 function update() {
   if (gameOver) {
-    updateScore(); // Update score display on game over
-    // Only submit score if it's a new highscore and game is over
+    updateScore();
     if (score > highscore) {
       highscore = score;
       saveHighScore();
@@ -271,6 +302,8 @@ function update() {
   draw();
 }
 
+let softDropInterval = null;
+
 window.addEventListener("keydown", e => {
   if (gameOver) {
     grid = Array.from({length: rows}, () => Array(cols).fill(0));
@@ -280,22 +313,34 @@ window.addEventListener("keydown", e => {
     draw();
     return;
   }
-  if (e.key === "ArrowLeft" || e.key === "a") {
-    if (!collides(x - 1, y, current)) x--;
-  } else if (e.key === "ArrowRight" || e.key === "d") {
-    if (!collides(x + 1, y, current)) x++;
-  } else if (e.key === "ArrowDown" || e.key === "s") {
-    // Soft drop: move down and give score
+  if (e.key === "ArrowDown" || e.key === "s") {
+    if (!softDropInterval) {
+      softDropInterval = setInterval(() => {
+        if (!collides(x, y + 1, current)) {
+          y++;
+          score += SCORE_SOFT_DROP;
+          updateScore();
+          draw();
+        }
+      }, 40);
+    }
     if (!collides(x, y + 1, current)) {
       y++;
       score += SCORE_SOFT_DROP;
       updateScore();
+      draw();
     }
+  } else if (e.key === "ArrowLeft" || e.key === "a") {
+    if (!collides(x - 1, y, current)) x--;
+    draw();
+  } else if (e.key === "ArrowRight" || e.key === "d") {
+    if (!collides(x + 1, y, current)) x++;
+    draw();
   } else if (e.key === "ArrowUp" || e.key === "w") {
     const rotated = rotate(current);
     if (!collides(x, y, rotated)) current = rotated;
+    draw();
   } else if (e.code === "Space") {
-    // Hard drop: drop to bottom, give score for each row dropped
     let dropRows = 0;
     while (!collides(x, y + 1, current)) {
       y++;
@@ -306,8 +351,18 @@ window.addEventListener("keydown", e => {
     merge();
     clearLines();
     spawnTetromino();
+    draw();
   }
-  draw();
+});
+
+window.addEventListener("keyup", e => {
+  if (e.key === "ArrowDown" || e.key === "s") {
+    // Stop fast soft drop when key released
+    if (softDropInterval) {
+      clearInterval(softDropInterval);
+      softDropInterval = null;
+    }
+  }
 });
 
 // Game loop

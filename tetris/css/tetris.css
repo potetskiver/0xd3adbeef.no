@@ -96,13 +96,16 @@ html, body {
 
 .leaderboard {
   position: absolute;
-  top: 19%; /* roughly aligns with snake canvas */
-  left: 70%; /* adjust based on your screen size / canvas width */
+  top: 19%;
+  left: 70%;
   color: #0f0;
   font-family: 'sans-serif';
   font-weight: bold;
   font-size: 20px;
   width: 400px;
+  background: rgba(0,0,0,0.5); /* half-transparent black background */
+  border-radius: 16px;
+  padding: 16px;
 }
 
 .leaderboard h3 {
