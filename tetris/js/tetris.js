@@ -1,4 +1,4 @@
-const cols = 10;
+const cols = 12;
 const rows = 20;
 const maxWidth = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.45);
 const gridSize = 24;
@@ -28,6 +28,130 @@ const colors = ["cyan","red","green","yellow","purple","blue","orange"];
 
 let grid = Array.from({length: rows}, () => Array(cols).fill(0));
 let current, currentColor, x, y, gameOver = false, score = 0, highscore = 0;
+let username = "";
+
+// Scoring constants
+const SCORE_SOFT_DROP = 1;      // Each manual down movement
+const SCORE_HARD_DROP = 2;      // Each spacebar drop row
+const SCORE_LINE_CLEAR = [100, 300, 500, 800]; // 1,2,3,4 lines
+
+// --- Username ---
+function updateUsername() {
+  let storedName = localStorage.getItem("username");
+  if (storedName && storedName.trim() !== "") {
+    username = storedName;
+  } else {
+    username = prompt("Hva vil du kalle deg?");
+    if (username && username.trim() !== "") {
+      localStorage.setItem("username", username);
+    } else {
+      username = "Usatt";
+    }
+  }
+  document.getElementById("username").innerText = `Navn: ${username}`;
+}
+
+function clearUsername() {
+  localStorage.removeItem("username");
+  username = "";
+  updateUsername();
+  initGame();
+}
+
+document.getElementById("clear-username").addEventListener("click", clearUsername);
+
+// --- Score ---
+function updateScore() {
+  document.getElementById("score").innerText = `Score: ${score}`;
+  document.getElementById("highscore").innerText = `Highscore: ${highscore}`;
+}
+
+// --- Highscore ---
+function loadHighScore() {
+  let savedScore = localStorage.getItem("tetris-highscore");
+  return savedScore ? parseInt(savedScore) : 0;
+}
+
+async function saveHighScore() {
+  updateScore();
+  if (!username) updateUsername();
+  if (!tetrisToken) await getTetrisToken();
+
+  fetch("/tetrisAPI/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-game-token": tetrisToken
+    },
+    body: JSON.stringify({ name: username, score: highscore })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) console.log("Score submitted!");
+    else console.warn("Score submission failed", data.error);
+  })
+  .catch(err => console.error("Error submitting score:", err));
+  tetrisToken = "";
+}
+
+async function getHighScore(name) {
+  if (!name) {
+    name = localStorage.getItem("username");
+    if (!name) return 0;
+  }
+  try {
+    const res = await fetch(`/tetrisAPI/score/${encodeURIComponent(name)}`);
+    if (!res.ok) return 0;
+    const data = await res.json();
+    return typeof data.score === "number" ? data.score : 0;
+  } catch (err) {
+    console.error("Error fetching highscore:", err);
+    return 0;
+  }
+}
+
+async function updateLeaderboard() {
+  try {
+    const res = await fetch("/tetrisAPI/leaderboard");
+    if (!res.ok) throw new Error("Failed to fetch leaderboard");
+    const data = await res.json();
+    const left = document.getElementById("leaderboard-list-left");
+    const right = document.getElementById("leaderboard-list-right");
+    const leaderText = document.getElementById("leaderboard-leader");
+    left.innerHTML = "";
+    right.innerHTML = "";
+    if (data.length === 0) {
+      leaderText.innerText = "No scores yet!";
+      return;
+    }
+    data.slice(0, 10).forEach((entry, i) => {
+      const li = document.createElement("li");
+      li.innerText = `${i + 1}. ${entry.name}: ${entry.score}`;
+      left.appendChild(li);
+    });
+    data.slice(10, 20).forEach((entry, i) => {
+      const li = document.createElement("li");
+      li.innerText = `${i + 11}. ${entry.name}: ${entry.score}`;
+      right.appendChild(li);
+    });
+    const topPlayer = data[0];
+    leaderText.innerText = `${topPlayer.name} leder!`;
+  } catch (err) {
+    console.error("Error loading leaderboard:", err);
+  }
+}
+
+var leaderboardInterval = setInterval(updateLeaderboard, 30000);
+
+// --- Init ---
+async function initGame() {
+  if (!username) updateUsername();
+  highscore = await getHighScore(username);
+  updateLeaderboard();
+  updateScore();
+  draw();
+}
+initGame();
 
 function spawnTetromino() {
   const idx = Math.floor(Math.random() * tetrominoes.length);
@@ -74,7 +198,10 @@ function clearLines() {
       r++;
     }
   }
-  if (lines) score += lines * 100;
+  if (lines) {
+    // Give score based on number of lines cleared at once
+    score += SCORE_LINE_CLEAR[Math.min(lines, SCORE_LINE_CLEAR.length) - 1];
+  }
 }
 
 function rotate(shape) {
@@ -123,7 +250,15 @@ function draw() {
 }
 
 function update() {
-  if (gameOver) return;
+  if (gameOver) {
+    updateScore(); // Update score display on game over
+    // Only submit score if it's a new highscore and game is over
+    if (score > highscore) {
+      highscore = score;
+      saveHighScore();
+    }
+    return;
+  }
 
   if (!collides(x, y + 1, current)) {
     y++;
@@ -132,6 +267,7 @@ function update() {
     clearLines();
     spawnTetromino();
   }
+
   draw();
 }
 
@@ -149,15 +285,24 @@ window.addEventListener("keydown", e => {
   } else if (e.key === "ArrowRight" || e.key === "d") {
     if (!collides(x + 1, y, current)) x++;
   } else if (e.key === "ArrowDown" || e.key === "s") {
-    if (!collides(x, y + 1, current)) y++;
+    // Soft drop: move down and give score
+    if (!collides(x, y + 1, current)) {
+      y++;
+      score += SCORE_SOFT_DROP;
+      updateScore();
+    }
   } else if (e.key === "ArrowUp" || e.key === "w") {
     const rotated = rotate(current);
     if (!collides(x, y, rotated)) current = rotated;
   } else if (e.code === "Space") {
-    // Instant drop
+    // Hard drop: drop to bottom, give score for each row dropped
+    let dropRows = 0;
     while (!collides(x, y + 1, current)) {
       y++;
+      dropRows++;
     }
+    score += dropRows * SCORE_HARD_DROP;
+    updateScore();
     merge();
     clearLines();
     spawnTetromino();
@@ -174,3 +319,16 @@ function startGame() {
   interval = setInterval(update, 400);
 }
 startGame();
+
+let tetrisToken = "";
+
+async function getTetrisToken() {
+  try {
+    const res = await fetch("/tetrisAPI/get-token");
+    const data = await res.json();
+    tetrisToken = data.token;
+  } catch (err) {
+    console.error("Could not get Tetris token", err);
+    tetrisToken = "";
+  }
+}
