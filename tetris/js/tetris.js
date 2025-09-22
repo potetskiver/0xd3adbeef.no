@@ -34,7 +34,7 @@ let promptingName = false;
 // Scoring constants
 const SCORE_SOFT_DROP = 1;      // Each manual down movement
 const SCORE_HARD_DROP = 2;      // Each spacebar drop row
-const SCORE_LINE_CLEAR = [100, 300, 500, 800]; // 1,2,3,4 lines
+const SCORE_LINE_CLEAR = [50, 100, 250, 400]; // 1,2,3,4 lines
 
 // --- Username ---
 function updateUsername() {
@@ -203,9 +203,7 @@ function clearLines() {
       r++;
     }
   }
-  if (lines) {
-    score += SCORE_LINE_CLEAR[Math.min(lines, SCORE_LINE_CLEAR.length) - 1];
-  }
+  return lines; // Return number of lines cleared
 }
 
 function rotate(shape) {
@@ -295,7 +293,11 @@ function update() {
     y++;
   } else {
     merge();
-    clearLines();
+    const linesCleared = clearLines();
+    if (linesCleared) {
+      score += SCORE_LINE_CLEAR[Math.min(linesCleared, SCORE_LINE_CLEAR.length) - 1];
+      updateScore();
+    }
     spawnTetromino();
   }
 
@@ -347,9 +349,12 @@ window.addEventListener("keydown", e => {
       dropRows++;
     }
     score += dropRows * SCORE_HARD_DROP;
-    updateScore();
     merge();
-    clearLines();
+    const linesCleared = clearLines();
+    if (linesCleared) {
+      score += SCORE_LINE_CLEAR[Math.min(linesCleared, SCORE_LINE_CLEAR.length) - 1];
+      updateScore();
+    }
     spawnTetromino();
     draw();
   }
