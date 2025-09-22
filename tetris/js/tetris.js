@@ -349,6 +349,7 @@ window.addEventListener("keydown", e => {
       dropRows++;
     }
     score += dropRows * SCORE_HARD_DROP;
+    updateScore(); // <-- Add this line to update score after hard drop
     merge();
     const linesCleared = clearLines();
     if (linesCleared) {
