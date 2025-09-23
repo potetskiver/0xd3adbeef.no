@@ -93,7 +93,7 @@ canvas {
 
 .snake-button {
   min-width: unset; 
-  gap: 0;
+  gap: 18px;
   width: auto;
   justify-content: center;
   align-items: center;

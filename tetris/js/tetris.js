@@ -1,7 +1,7 @@
 const cols = 12;
 const rows = 24;
 const maxWidth = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.45);
-const gridSize = 24;
+const gridSize = 20;
 const canvasWidth = gridSize * cols;
 const canvasHeight = gridSize * rows;
 const tetrisCanvas = document.getElementById("tetris");
