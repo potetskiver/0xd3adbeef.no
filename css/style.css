@@ -95,8 +95,6 @@ canvas {
   min-width: unset; 
   gap: 18px;
   width: auto;
-  justify-content: center;
-  align-items: center;
   margin-top: 2vh;
   padding: 0;
 }
