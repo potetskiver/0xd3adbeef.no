@@ -1,0 +1,43 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+.c {
+    text-align: center;
+}
+
+@keyframes randomRainbow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
+}
+
+.rainbow-text {
+    background: linear-gradient(
+        270deg,
+        blue,
+        purple,
+        rgb(255, 0, 255),
+        red,
+        purple,
+        blue,
+        red,
+        rgb(255, 0, 255),
+        blue,
+        purple
+    );
+    background-size: 400% 100%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: randomRainbow 10s linear infinite;
+}
