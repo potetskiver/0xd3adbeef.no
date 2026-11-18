@@ -21,7 +21,7 @@ function draw() {
     letters[index] = y > canvas.height + Math.random() * 8000 ? 0 : y + fontSize;
   });
 }
-setInterval(draw, 24);
+setInterval(draw, 72); //24
 
 window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
