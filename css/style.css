@@ -73,8 +73,7 @@ canvas {
 }
 
 /* Knapper */
-.button-row,
-.snake-button {
+.button-row {
   position: static;
   margin-top: 0;
   transform: none;
@@ -89,14 +88,6 @@ canvas {
   width: fit-content;
   min-width: 384px;
   gap: 32px;
-}
-
-.snake-button {
-  min-width: unset; 
-  gap: 18px;
-  width: auto;
-  margin-top: 2vh;
-  padding: 0;
 }
 
 .button-row, footer {
@@ -120,13 +111,6 @@ canvas {
   width: 48px;
 }
 
-.snake-button img {
-  height: auto;     /* Let the image keep its aspect ratio */
-  width: 168px;     /* Set to your snake image's actual width */
-  max-width: 90vw;  /* Responsive: don't overflow screen */
-  max-height: 128px;/* Set a max height if needed */
-}
-
 .link-btn img, 
 .coffee-btn img {
   border-radius: 16px; /* Knapper med avrundede hjørner */
@@ -148,14 +132,12 @@ canvas {
 
 .link-btn img:hover, 
 .github-btn img:hover,
-.coffee-btn img:hover,
-.snake-button img:hover {
+.coffee-btn img:hover {
   transform: scale(1.18);
 }
 
 .link-btn img:hover, 
-.github-btn img:hover,
-.snake-button img:hover {
+.github-btn img:hover {
   box-shadow: 0 8px 32px 16px var(--green);
 }
 
@@ -228,13 +210,6 @@ canvas {
   .github-btn img {
     height: 48px;
     width: 48px;
-  }
-
-  .snake-button img {
-    height: auto;
-    width: 128px;
-    max-width: 45vw; 
-    max-height: 128px;
   }
 
   .link-btn img:hover,
